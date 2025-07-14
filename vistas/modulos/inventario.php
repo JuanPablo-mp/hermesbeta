@@ -22,7 +22,10 @@
           if (ControladorValidacion::validarPermisoSesion([1])) {
             echo '
             <div class="col-sm-6">
-            <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modalRegistrarEquipo">Agregar equipo</button>
+            <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modalRegistrarEquipo">Agregar equipo</button>';
+          };
+          if (ControladorValidacion::validarPermisoSesion([6])) {
+            echo '
             <button class="btn btn-success float-right ml-2" style="margin-right:10px;" data-toggle="modal" data-target="#modalImportarEquipos">
               <i class="fas fa-upload"></i> Importar Equipos
             </button>

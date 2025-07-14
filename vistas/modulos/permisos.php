@@ -65,8 +65,11 @@
                                                     $roles = ControladorRoles::ctrMostrarRoles($item, $valor);
                                                     // Loop through the roles and display them in the select options
                                                     foreach ($roles as $key => $value) {
-                                                        if ($value["estado"]== "activo"){
-                                                            echo '<option value="' . $value["id_rol"] . '">' . $value["nombre_rol"] . '</option>';
+                                                        if ($value["nombre_rol"] != "Administrador") {
+                                                            // Only show roles that are not "Administrador"
+                                                            if ($value["estado"]== "activo"){
+                                                                echo '<option value="' . $value["id_rol"] . '">' . $value["nombre_rol"] . '</option>';
+                                                            }
                                                         }
                                                     };
                                                     ?>

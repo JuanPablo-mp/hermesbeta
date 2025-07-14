@@ -59,7 +59,9 @@ class ModeloPermisos
                                                         p.descripcion AS descripcion_permiso,  m.nombre AS nombre_modulo,
                                                         m.id_modulo
                                                         FROM permisos p
-                                                        JOIN modulos m ON p.id_modulo = m.id_modulo ORDER BY m.id_modulo");        
+                                                        JOIN modulos m ON p.id_modulo = m.id_modulo 
+                                                        WHERE p.id_permiso != 29
+                                                        ORDER BY m.id_modulo");        
 
         $stmt->execute();
 

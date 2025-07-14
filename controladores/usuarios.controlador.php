@@ -6,14 +6,34 @@ class ControladorUsuarios
     public function ctrIngresoUsuario()
     {
         if (isset($_POST["ingUsuario"])) {
+
+            // Inicializar contador si no existe
+            if (!isset($_SESSION["intentosLogin"])) {
+                $_SESSION["intentosLogin"] = 0;
+            }
+
+            // Bloqueo temporal por intentos fallidos
+            if ($_SESSION["intentosLogin"] >= 5) {
+                if (!isset($_SESSION["bloqueadoHasta"])) {
+                    $_SESSION["bloqueadoHasta"] = time() + 300; // 5 minutos
+                }
+
+                if (time() < $_SESSION["bloqueadoHasta"]) {
+                    echo '<div class="alert alert-danger">Demasiados intentos. Intenta después.</div>';
+                    return;
+                } else {
+                    $_SESSION["intentosLogin"] = 0;
+                    unset($_SESSION["bloqueadoHasta"]);
+                }
+            }
+
+            // Validación de formato
             if (
                 preg_match('/^[a-zA-Z0-9]+$/', $_POST["ingUsuario"]) &&
                 preg_match('/^[a-zA-Z0-9]+$/', $_POST["ingPassword"])
             ) {
 
                 $encriptar = crypt($_POST["ingPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-                // echo $encriptar;
-
                 $tabla = "usuarios";
                 $item = "nombre_usuario";
                 $valor = $_POST["ingUsuario"];
@@ -23,8 +43,13 @@ class ControladorUsuarios
                 if (is_array($respuesta)) {
 
                     if ($respuesta["nombre_usuario"] == $_POST["ingUsuario"] && $respuesta["clave"] == $encriptar) {
+
                         if ($respuesta["estado"] == "activo") {
-                            // Iniciar sesión y guardar datos del usuario
+                            // Login exitoso: reiniciar intentos y regenerar sesión
+                            $_SESSION["intentosLogin"] = 0;
+                            session_regenerate_id(true);
+
+                            // Guardar variables de sesión
                             $_SESSION["iniciarSesion"] = "ok";
                             $_SESSION["id_usuario"] = $respuesta["id_usuario"];
                             $_SESSION["nombre"] = $respuesta["nombre"];
@@ -35,27 +60,29 @@ class ControladorUsuarios
                             $_SESSION["nombre_rol"] = $respuesta["nombre_rol"];
                             $_SESSION["numero_documento"] = $respuesta["numero_documento"];
 
-
-                            // Obtener permisos del rol
+                            // Permisos
                             $permisos = ModeloPermisos::mdlMostrarPermisos("id_rol", $respuesta["id_rol"]);
                             $_SESSION["permisos"] = array();
                             foreach ($permisos as $permiso) {
                                 $_SESSION["permisos"][] = $permiso["id_permiso"];
                             }
 
-                            echo '<script>
-                            window.location = "inicio";
-                        </script>';
+                            echo '<script>window.location = "inicio";</script>';
+                            return;
                         } else {
                             echo '<br><div class="alert alert-danger">El usuario está inactivo</div>';
+                            return;
                         }
-                    } else {
-                        echo '<br><div class="alert alert-danger">Usuario y/o contraseña incorrectos</div>';
                     }
                 }
+
+                // Si llegó hasta aquí: login fallido
+                $_SESSION["intentosLogin"]++;
+                echo '<br><div class="alert alert-danger">Usuario y/o contraseña incorrectos</div>';
             }
         }
     }
+
 
     static public function ctrEditarPerfil()
     {
@@ -137,12 +164,14 @@ class ControladorUsuarios
             ACTUALIZAR BASE DE DATOS
             =============================================*/
             $tabla = "usuarios";
+            $encriptar = crypt($_POST["nuevoPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
             $datos = array(
                 "id_usuario" => $_POST["idUsuario"],
                 "correo_electronico" => $_POST["editarEmail"],
                 "telefono" => $_POST["editarTelefono"],
                 "direccion" => $_POST["editarDireccion"],
                 "genero" => $_POST["editarGenero"],
+                "clave" => $encriptar,
                 "foto" => $ruta
             );
 
@@ -224,7 +253,7 @@ class ControladorUsuarios
                     imagejpeg($destino, $ruta);
                 }
                 $tabla = "usuarios";
-                $encriptar = crypt($_POST["nuevoPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
+                $encriptar = crypt($_POST["nuevoNumeroDocumento"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
                 $datos = array(
                     "nombre" => $_POST["nuevoNombre"],
                     "apellido" => $_POST["nuevoApellido"],
@@ -591,7 +620,6 @@ class ControladorUsuarios
                             // $idFichaFinal = $idFicha;
                             //traemos el id de la ficha que si existe
                             $idFichaFinal = $fichaExiste["id_ficha"];
-
                         }
 
                         $encriptarPassword = crypt($numeroDocumento, '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');

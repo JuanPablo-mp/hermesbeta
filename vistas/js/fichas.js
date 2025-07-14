@@ -26,10 +26,20 @@ $('#tblFichas').DataTable({
         {
             "targets": [6],
             "render": function(data, type, row) {
-                if (data === "activa") {
-                    return "<button  class='btn btn-success btn-xs btnActivarFicha' idFicha='" + row[0] + "' estadoFicha='inactiva' title='Ficha activa' data-toggle='tooltip'><i class='fas fa-check'></i></button>";
-                } else {
-                    return "<button  class='btn btn-danger btn-xs btnActivarFicha' idFicha='" + row[0] + "' estadoFicha='activa' title='Ficha inactiva' data-toggle='tooltip'><i class='fas fa-ban'></i></button>";                    
+                if (usuarioActual["permisos"].includes(11)) {
+                    if (data === "activa") {
+                        //si el usuario tiene permisos para activar/desactivar fichas
+                        return "<button  class='btn btn-success btn-xs btnActivarFicha' idFicha='" + row[0] + "' estadoFicha='inactiva' title='Ficha activa' data-toggle='tooltip'><i class='fas fa-check'></i></button>";
+                    } else {
+                        return "<button  class='btn btn-danger btn-xs btnActivarFicha' idFicha='" + row[0] + "' estadoFicha='activa' title='Ficha inactiva' data-toggle='tooltip'><i class='fas fa-ban'></i></button>";                    
+                    }
+                }else{
+                    if (data === "activa") {
+                        //si el usuario tiene permisos para activar/desactivar fichas
+                        return "<button  class='btn btn-success btn-xs' title='Ficha activa' data-toggle='tooltip' disabled><i class='fas fa-check'></i></button>";
+                    } else {
+                        return "<button  class='btn btn-danger btn-xs' title='Ficha inactiva' data-toggle='tooltip' disabled><i class='fas fa-ban'></i></button>";                    
+                    } 
                 }
             }
         },
@@ -37,13 +47,17 @@ $('#tblFichas').DataTable({
         {
             "targets": [-1],
             "render": function(row) {
-                
-            return "<div class='btn-group'>" +
-                "<button title='Editar datos ficha' data-tooltip='tooltip' class='btn btn-default btn-xs btnEditarFicha' idFicha='" + row[0] + "' data-toggle='modal' data-target='#modalEditFicha'>" +
-                "<i class='fas fa-edit '></i>" +
-                "</button></div>";
-
-                 
+                if (usuarioActual["permisos"].includes(14)) {
+                    return "<div class='btn-group'>" +
+                        "<button title='Editar datos ficha' data-tooltip='tooltip' class='btn btn-default btn-xs btnEditarFicha' idFicha='" + row[0] + "' data-toggle='modal' data-target='#modalEditFicha'>" +
+                        "<i class='fas fa-edit '></i>" +
+                        "</button></div>";
+                }else {
+                    return "<div class='btn-group'>" +
+                        "<button title='Editar datos ficha' data-tooltip='tooltip' class='btn btn-default btn-xs' disabled>" +
+                        "<i class='fas fa-edit '></i>" +
+                        "</button></div>";
+                }                 
             }
         }
     ],
@@ -72,6 +86,7 @@ $('#tblFichas').DataTable({
 $(document).on("click", ".btnEditarFicha", function() {
 // $(".btnEditarFicha").click(function() {
     var idFicha = $(this).attr("idFicha");
+    console.log("idFicha:", idFicha);
     var datos = new FormData();
     datos.append("idFicha", idFicha);
     $.ajax({
@@ -83,7 +98,7 @@ $(document).on("click", ".btnEditarFicha", function() {
         processData: false,
         dataType: "json",
         success: function(respuesta) {
-            // console.log("Ficha", respuesta["nom"]);
+            console.log("ficha:",respuesta);
             $("#idEditFicha").val(respuesta["id_ficha"]);
             $("#editCodigoFicha").val(respuesta["codigo"]);
             $("#editDescripcionFicha").val(respuesta["descripcion"]);

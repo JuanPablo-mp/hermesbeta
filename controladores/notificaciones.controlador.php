@@ -42,19 +42,6 @@ class ControladorNotificaciones {
         return ModeloNotificaciones::mdlMarcarTodasComoLeidas($tabla, $usuario_id);
     }
 
-    /*=============================================
-    CREAR NOTIFICACIÓN
-    =============================================*/
-    static public function crearNotificacion($usuarioId, $idTipoEvento, $mensaje, $url = null) {
-        $tabla = "notificaciones";
-        $datos = array(
-            "id_usuario"    => $usuarioId,
-            "id_tipo_evento"=> $idTipoEvento,
-            "mensaje"       => $mensaje,
-            "url"           => $url
-        );
-        return ModeloNotificaciones::mdlIngresarNotificacion($tabla, $datos);
-    }
 
     
     /*=============================================
@@ -92,57 +79,4 @@ class ControladorNotificaciones {
 
         return ModeloNotificaciones::mdlObtenerDetallesNotificacion($tabla, $id_notificacion);
     }
-
- 
-    
-    // /*=============================================
-    // NOTIFICAR CAMBIO DE ESTADO DE USUARIO
-    // =============================================*/
-    // static public function notificarCambioEstadoUsuario($idUsuarioEditado, $estadoAnterior, $estadoNuevo) {
-    //     if ($estadoAnterior !== $estadoNuevo) {
-
-    //         // Obtener datos del usuario afectado (editado)
-    //         $usuarioEditado = ModeloUsuarios::mdlMostrarUsuarios("usuarios", "id_usuario", $idUsuarioEditado);
-
-    //         $nombreAfectado = "Usuario";
-    //         if ($usuarioEditado && isset($usuarioEditado["nombre"], $usuarioEditado["apellido"])) {
-    //             $nombreAfectado = $usuarioEditado["nombre"] . ' ' . $usuarioEditado["apellido"];
-    //         }
-
-    //         // Obtener todos los administradores (rol 9)
-    //         $admins = ModeloUsuarios::mdlMostrarUsuarios("usuarios", "rol", 9);
-
-    //         echo "<pre>";
-    //         print_r($admins);
-    //         echo "</pre>";
-    //         exit;
-
-    //         // Asegurarse de que $admins sea siempre un array indexado
-    //         if ($admins && isset($admins["id_usuario"])) {
-    //             $admins = [ $admins ]; // Envolver si vino como un solo resultado
-    //         }
-
-    //         // Notificar a cada administrador
-    //         if ($admins) {
-    //             foreach ($admins as $adminUser) {
-    //                 if (isset($adminUser["id_usuario"])) {
-    //                     ControladorNotificaciones::crearNotificacion(
-    //                         $adminUser["id_usuario"],
-    //                         $idTipoEvento,
-    //                         $mensaje,
-    //                         $url
-    //                     );
-    //                 }
-    //             }
-    //         }
-
-    //         // Notificar también al usuario afectado
-    //         ControladorNotificaciones::crearNotificacion(
-    //             $idUsuarioEditado,
-    //             $idTipoEvento,
-    //             $mensaje,
-    //             $url
-    //         );
-    //     }
-    //     }
 }

@@ -42,7 +42,7 @@ if ($respuesta["estado"] == "inactivo") {
                     <div class="card">
                         <div class="card-body">
                             <table id="tblSedes" class="table table-bordered table-striped">
-                                <thead>
+                                <thead class="bg-dark">
                                     <tr>
                                         <th>ID</th>
                                         <th>Nombre</th>
@@ -69,11 +69,11 @@ if ($respuesta["estado"] == "inactivo") {
                                                 <td>' . $value["direccion"] . '</td>
                                                 <td>' . $value["descripcion"] . '</td>
                                                 <td>';
-                                        if (ControladorValidacion::validarPermisoSesion([23])) {
+                                        if (ControladorValidacion::validarPermisoSesion([15])) {
                                             if ($value["estado"] == "activa") {
                                                 echo '<button class="btn btn-success btn-xs btnActivarSede" idSede="' . $value["id_sede"] . '" estadoSede="inactiva"">Activa</button>';
                                             } else {
-                                                echo '<button class="btn btn-danger btn-xs btnActivarSede" idSede="' . $value["id_sede"] . '" estadoSede="activa">Inactiva</button>';
+                                                echo '<button class="btn btn-danger btn-xs" idSede="' . $value["id_sede"] . '" estadoSede="activa">Inactiva</button>';
                                             };
                                         } else {
                                             if ($value["estado"] == "activa") {

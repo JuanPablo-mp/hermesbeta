@@ -19,7 +19,12 @@
                         <h1>Fichas</h1>
                     </div>
                     <div class="col-sm-6">
-                        <button class="btn btn-primary float-right" data-toggle="modal" data-target="#modalAddFicha">Agregar Ficha</button>
+                        <?php
+                        if (ControladorValidacion::validarPermisoSesion([10])) {
+                            echo '<button class="btn btn-primary float-right" data-toggle="modal" data-target="#modalAddFicha">Agregar Ficha</button>';
+                        }
+                        ?>
+                        
                     </div>
                 </div>
             </div><!-- /.container-fluid -->

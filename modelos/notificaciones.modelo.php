@@ -67,22 +67,7 @@ class ModeloNotificaciones {
         return $stmt->execute();
     }
 
-    /*=============================================
-    INGRESAR NOTIFICACION
-    =============================================*/
-    static public function mdlIngresarNotificacion($tabla, $datos) {
-        $conexion = Conexion::conectar();
-        $stmt = $conexion->prepare("INSERT INTO $tabla(id_usuario, id_tipo_evento, mensaje, url, leida) VALUES (:id_usuario, :id_tipo_evento, :mensaje, :url, 0)");
-        $stmt->bindParam(":id_usuario", $datos["id_usuario"], PDO::PARAM_INT);
-        $stmt->bindParam(":id_tipo_evento", $datos["id_tipo_evento"], PDO::PARAM_INT);
-        $stmt->bindParam(":mensaje", $datos["mensaje"], PDO::PARAM_STR);
-        $stmt->bindParam(":url", $datos["url"], PDO::PARAM_STR);
-        if($stmt->execute()){
-            return "ok";
-        }else{
-            return "error";
-        }
-    }
+    
 
     /*=============================================
     OBTENER DETALLES DE UNA NOTIFICACION
