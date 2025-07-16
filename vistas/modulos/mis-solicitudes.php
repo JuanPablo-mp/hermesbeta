@@ -146,67 +146,114 @@ if ($respuesta["estado"] == "inactivo") {
     </section>
 </div>
 
-<!-- Modal Detalle Préstamo (se mantiene igual) -->
+<!-- Modal Detalle Préstamo -->
 <div class="modal fade" id="modalMisDetalles">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h4 class="modal-title">Detalle del Préstamo #<span id="numeroPrestamo"></span></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <dl class="row">
-                            <dt class="col-sm-4">Estado:</dt>
-                            <dd class="col-sm-8" id="detalleTipoPrestamo"></dd>
+  <div class="modal-dialog  modal-xl">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h4 class="modal-title">Detalle del Préstamo #<span id="numeroPrestamo"></span></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
-                            <dt class="col-sm-4">Fecha Préstamo:</dt>
-                            <dd class="col-sm-8" id="detalleFechaInicio"></dd>
-
-                            <dt class="col-sm-4">Fecha Devolución:</dt>
-                            <dd class="col-sm-8" id="detalleFechaFin"></dd>
-
-                            <dt class="col-sm-4">Motivo:</dt>
-                            <dd class="col-sm-8" id="detalleMotivoPrestamo"></dd>
-                        </dl>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Equipos Solicitados</h5>
-                            </div>
-                            <div class="card-body p-10">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-striped" id="tblDetallePrestamo">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Categoría</th>
-                                                <th>Equipo</th>
-                                                <th>Etiqueta</th>
-                                                <th>Serial</th>
-                                                <th>Ubicación</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!-- Aquí se cargarán los detalles del préstamo -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="modal-body">
+        <!-- 🔹 Fila de info-boxes -->
+        <div class="row">
+          <!-- Tipo Préstamo -->
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-info"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Tipo Préstamo</span>
+                <span class="info-box-number" id="detalleTipoPrestamo">aaaa</span>
+              </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          </div>
+
+          <!-- Motivo -->
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-comment"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Motivo</span>
+                <span class="info-box-number" id="detalleMotivoPrestamo">aaaa</span>
+              </div>
             </div>
+          </div>
+
+          <!-- Fecha Inicio -->
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-calendar-alt"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Fecha Inicio</span>
+                <span class="info-box-number" id="detalleFechaInicio">2025-06-27</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fecha Fin -->
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-calendar-check"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">Fecha Devolución</span>
+                <span class="info-box-number" id="detalleFechaFin">2025-07-05</span>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- 🔹 Estado (fuera de la fila anterior) -->
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="callout callout-success w-100" id="estadoCallout">
+              <h5><i class="fas fa-check"></i> Estado:</h5>
+              <span class="badge badge-success badge-lg" id="estadoPrestamo">Autorizado</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🔹 Tabla de equipos solicitados -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card mt-3">
+              <div class="card-header">
+                <h5 class="card-title">Equipos Solicitados</h5>
+              </div>
+              <div class="card-body p-3">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-striped" style="width: 100%" id="tblDetallePrestamo">
+                    <thead class="bg-dark">
+                      <tr>
+                        <th>ID</th>
+                        <th>Categoría</th>
+                        <th>Equipo</th>
+                        <th>Etiqueta</th>
+                        <th>Serial</th>
+                        <th>Ubicación</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Aquí se cargarán los detalles del préstamo -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
     </div>
+  </div>
 </div>
+
 
 <script>
     // Activar tooltips

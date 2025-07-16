@@ -1,4 +1,4 @@
-  <div class="login-box">
+<div class="login-box">
     <div class="login-logo">
       <img src="vistas/img/Logo/android-chrome-192x192.png" alt="HERMES Logo" class="img-fluid mb-3">
       <br>    
@@ -19,8 +19,11 @@
             </div>
           </div>
           <div class="input-group mb-3">
-            <input type="password" class="form-control" placeholder="Password" name="ingPassword" required>
+            <input type="password" class="form-control" placeholder="Password" name="ingPassword" id="passwordField" required>
             <div class="input-group-append">
+              <div class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                <span class="fas fa-eye" id="toggleIcon"></span>
+              </div>
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>
               </div>
@@ -46,7 +49,7 @@
             $login = new ControladorUsuarios();
             $login -> ctrIngresoUsuario();
           ?>
-
+          <script src="vistas/js/login.js"></script>
         </form>
 
         <!-- <p class="mb-1">

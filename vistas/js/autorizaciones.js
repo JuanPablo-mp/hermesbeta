@@ -1,7 +1,7 @@
 //funcion para traer las autorizaciones del prestamo
 function traerAutorizaciones(idPrestamo, estadoPrestamo) {
   //traemos las autorizaciones de ese mismo prestamo
-  console.log("idPrestamoFuncion :", idPrestamo);
+  // console.log("idPrestamoFuncion :", idPrestamo);
   datosAutorizaciones = new FormData();
   datosAutorizaciones.append("accion", "mostrarAutorizaciones");
   datosAutorizaciones.append("idPrestamo", idPrestamo);
@@ -14,7 +14,7 @@ function traerAutorizaciones(idPrestamo, estadoPrestamo) {
     processData: false,
     dataType: "json",
     success: function (respuestaAutorizaciones) {
-      console.log("AUTORIZACIONES :", respuestaAutorizaciones);
+      // console.log("AUTORIZACIONES :", respuestaAutorizaciones);
       $("#alertaRechazado").addClass("d-none");
       $(".btnAccionFirma").addClass("d-none");
       $(".btnDesautorizar").addClass("d-none");
@@ -38,29 +38,33 @@ function traerAutorizaciones(idPrestamo, estadoPrestamo) {
           );
           $("#alertaRechazado").removeClass("d-none");
         } else {
-          // BOTON AUTORIZAR - DESAUTORIZAR - RECHAZAR
-          //si tiene el rol para firmar y el rol no ha firmado, puede autorizar o rechazar
-          if (
-            (nombreRolSesion == "Coordinación" &&
-              firmaCoordinacion != "Firmado") ||
-            (nombreRolSesion == "Líder TIC" && firmaTIC != "Firmado") ||
-            (nombreRolSesion == "Almacén" && firmaAlmacen != "Firmado")
-          ) {
-            $(".btnAccionFirma").removeClass("d-none");
-          }
-          //si tiene el rol para firmar, si el rol ya ha firmado y fue el mismo usuario el que firmo, puede desautorizar
-          if (
-            (nombreRolSesion == "Coordinación" &&
-              firmaCoordinacion == "Firmado" &&
-              idCoordinacion == idUsuarioSesion) ||
-            (nombreRolSesion == "Líder TIC" &&
-              firmaTIC == "Firmado" &&
-              idLiderTIC == idUsuarioSesion) ||
-            (nombreRolSesion == "Almacén" &&
-              firmaAlmacen == "Firmado" &&
-              idAlmacen == idUsuarioSesion)
-          ) {
-            $(".btnDesautorizar").removeClass("d-none");
+          if (estadoPrestamo == "Vencido") {
+            $("#alertaVencido").removeClass("d-none");
+          } else {
+            // BOTON AUTORIZAR - DESAUTORIZAR - RECHAZAR
+            //si tiene el rol para firmar y el rol no ha firmado, puede autorizar o rechazar
+            if (
+              (nombreRolSesion == "Coordinación" &&
+                firmaCoordinacion != "Firmado") ||
+              (nombreRolSesion == "Líder TIC" && firmaTIC != "Firmado") ||
+              (nombreRolSesion == "Almacén" && firmaAlmacen != "Firmado")
+            ) {
+              $(".btnAccionFirma").removeClass("d-none");
+            }
+            //si tiene el rol para firmar, si el rol ya ha firmado y fue el mismo usuario el que firmo, puede desautorizar
+            if (
+              (nombreRolSesion == "Coordinación" &&
+                firmaCoordinacion == "Firmado" &&
+                idCoordinacion == idUsuarioSesion) ||
+              (nombreRolSesion == "Líder TIC" &&
+                firmaTIC == "Firmado" &&
+                idLiderTIC == idUsuarioSesion) ||
+              (nombreRolSesion == "Almacén" &&
+                firmaAlmacen == "Firmado" &&
+                idAlmacen == idUsuarioSesion)
+            ) {
+              $(".btnDesautorizar").removeClass("d-none");
+            }
           }
         }
       }
@@ -99,6 +103,48 @@ $(document).on("click", ".btnVerDetallePrestamo_Autorizar", function () {
       $("#detalleFechaFin").text(fechaFin);
       $("#detalleMotivoPrestamo").text(respuesta["motivo"]);
       $("#estadoPrestamo").text(respuesta["estado_prestamo"]);
+      $("#estadoCallout").removeClass(
+        "callout-success callout-warning callout-danger callout-info"
+      );
+
+      // Agregar nueva clase según estado
+      switch (respuesta["estado_prestamo"]) {
+        case "Autorizado":
+          $("#estadoCallout").addClass("callout-success");
+
+          break;
+        case "Pendiente":
+          $("#estadoCallout").addClass("callout-warning");
+
+          break;
+        case "Rechazado":
+          $("#estadoCallout").addClass("callout-danger");
+
+          break;
+        case "Tramite":
+          $("#estadoCallout").addClass("callout-info");
+
+          break;
+      }
+      $("#estadoPrestamo").removeClass(
+        "badge-success badge-warning badge-danger badge-primary"
+      );
+
+      // Agregar clase según estado
+      switch (respuesta["estado_prestamo"]) {
+        case "Autorizado":
+          $("#estadoPrestamo").addClass("badge-success");
+          break;
+        case "Pendiente":
+          $("#estadoPrestamo").addClass("badge-warning");
+          break;
+        case "Rechazado":
+          $("#estadoPrestamo").addClass("badge-danger");
+          break;
+        case "Tramite":
+          $("#estadoPrestamo").addClass("badge-primary");
+          break;
+      }
       datosUsuario = new FormData();
       datosUsuario.append("idUsuario", respuesta["id_usuario"]);
       //traemos los datos del usuario
@@ -111,7 +157,7 @@ $(document).on("click", ".btnVerDetallePrestamo_Autorizar", function () {
         processData: false,
         dataType: "json",
         success: function (respuestaUsuario) {
-          console.log("USUARIO :", respuestaUsuario);
+          // console.log("USUARIO :", respuestaUsuario);
           //colocamos los datos del usuario
           $("#usuarioNombre").text(
             respuestaUsuario["nombre"] + " " + respuestaUsuario["apellido"]
@@ -169,7 +215,7 @@ $(document).on("click", ".btnVerDetallePrestamo_Autorizar", function () {
             pagin: true,
             searching: true,
             ordering: true,
-            info: true,            
+            info: true,
             language: {
               sProcessing: "Procesando...",
               sLengthMenu: "Mostrar _MENU_ registros",
@@ -186,8 +232,7 @@ $(document).on("click", ".btnVerDetallePrestamo_Autorizar", function () {
                 next: "Siguiente",
                 previous: "Anterior",
               },
-            }
-            
+            },
           });
         },
       });
@@ -204,9 +249,9 @@ $(document).on("click", ".btnAutorizar", function () {
   let idPrestamo = $("#numeroPrestamo").text();
   let id_rol = $("#idRolSesion").val();
   let id_usuario = $("#id_UsuarioSesion").val();
-  console.log("idPrestamo :", idPrestamo);
-  console.log("id_rol :", id_rol);
-  console.log("id_usuario :", id_usuario);
+  // console.log("idPrestamo :", idPrestamo);
+  // console.log("id_rol :", id_rol);
+  // console.log("id_usuario :", id_usuario);
   // debugger;
   datos = new FormData();
   datos.append("accion", "autorizarReserva");
@@ -222,7 +267,7 @@ $(document).on("click", ".btnAutorizar", function () {
     processData: false,
     dataType: "json",
     success: function (respuesta) {
-      console.log("respuesta :", respuesta);
+      // console.log("respuesta :", respuesta);
       if (respuesta == "ok") {
         Swal.fire({
           icon: "success",
@@ -269,7 +314,7 @@ $(document).on("click", ".btnDesautorizar", function () {
     processData: false,
     dataType: "json",
     success: function (respuesta) {
-      console.log("respuesta :", respuesta);
+      // console.log("respuesta :", respuesta);
       if (respuesta == "ok") {
         Swal.fire({
           icon: "success",
@@ -301,3 +346,56 @@ $(document).on("click", ".btnRechazar", function () {
 
 //tooltip
 $("[title]").tooltip();
+
+$(document).ready(function () {
+  var table = $("#tblAutorizaciones").DataTable({
+    responsive: true,
+    autoWidth: false,
+    lengthChange: true,
+    lengthMenu: [10, 25, 50, 100],
+    ordering: false, // Desactiva la opción de ordenar filas
+    language: {
+      lengthMenu: "Mostrar _MENU_ registros",
+      zeroRecords: "No se encontraron resultados",
+      info: "Mostrando pagina _PAGE_ de _PAGES_",
+      infoEmpty: "No hay registros disponibles",
+      infoFiltered: "(filtrado de _MAX_ total registros)",
+      search: "Buscar:",
+      paginate: {
+        first: "Primero",
+        last: "Ultimo",
+        next: "Siguiente",
+        previous: "Anterior",
+      },
+    },
+    dom: "flBtip",
+    buttons: ["csv", "excel", "pdf"],
+  });
+
+  // Para cada columna, llena el select con los valores únicos
+  table.columns().every(function (colIdx) {
+    var column = this;
+    var select = $("thead tr:eq(0) th").eq(colIdx).find("select");
+    if (select.length) {
+      // Limpiar opciones excepto "Todos"
+      select.find("option:not(:first)").remove();
+      // Obtener valores únicos y agregarlos al select
+      column
+        .data()
+        .unique()
+        .sort()
+        .each(function (d) {
+          if (d && select.find('option[value="' + d + '"]').length === 0) {
+            // Elimina HTML si hay (por ejemplo, para los checkboxes)
+            var text = $("<div>").html(d).text().trim();
+            select.append('<option value="' + text + '">' + text + "</option>");
+          }
+        });
+      // Evento para filtrar al cambiar el select
+      select.off("change").on("change", function () {
+        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+        column.search(val ? "^" + val + "$" : "", true, false).draw();
+      });
+    }
+  });
+});

@@ -148,21 +148,11 @@
         }
         if (ControladorValidacion::validarPermisoSesion([34])) {
           echo '<li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
-              <p>
-                Usuarios
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
                 <a href="usuarios" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="nav-icon fas fa-users fa-angle-left"></i>
                   <p>Usuarios</p>
                 </a>
-              </li>
-              </ul>';
+              </li>';
         }
         if (ControladorValidacion::validarPermisoSesion([1])) {
           echo '
