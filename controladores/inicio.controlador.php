@@ -26,4 +26,13 @@ class ControladorInicio
         $respuesta = ModeloInicio::mdlObtenerEstadosEquipos($tabla);
         return $respuesta;
     }
+   // grafica Franco
+  static public function ctrContarUsuariosPorGenero($codigoFicha)
+    {
+        $respuesta = ModeloInicio::mdlContarUsuariosPorGenero($codigoFicha);
+        return $respuesta;
+
+    
+    }
 }
+

@@ -11,22 +11,26 @@ class ModeloMantenimiento
             if ($item == null) {
                 $stmt = Conexion::conectar()->prepare(
                     "SELECT 
-                        e.equipo_id,
-                        e.numero_serie,
-                        e.etiqueta,
-                        e.descripcion,
-                        m.id_mantenimiento,
-                        m.detalles,
-                        m.gravedad,
-                        p.usuario_id
-                    FROM 
-                        equipos e
-                    LEFT JOIN 
-                        mantenimiento m ON e.equipo_id = m.equipo_id
-                    LEFT JOIN 
-                        prestamos p ON m.id_prestamo = p.id_prestamo
-                    WHERE 
-                        e.id_estado = 4;"
+                    m.id_mantenimiento,
+                    e.equipo_id,
+                    e.numero_serie,
+                    e.etiqueta,
+                    e.descripcion,
+                    m.detalles,
+                    m.gravedad,
+                    u.nombre,
+                    u.apellido,
+                    u.condicion
+                FROM 
+                    mantenimiento m
+                INNER JOIN 
+                    equipos e ON m.equipo_id = e.equipo_id
+                INNER JOIN
+                    prestamos p ON m.id_prestamo = p.id_prestamo
+                INNER JOIN
+                    usuarios u ON p.usuario_id = u.id_usuario
+                WHERE 
+                    e.id_estado = 4;"
                 );
                 $stmt->execute();
                 return $stmt->fetchAll();
@@ -38,58 +42,79 @@ class ModeloMantenimiento
         }
     }
 
-    // Método para ingresar un nuevo mantenimiento
-    static public function mdlFinalizarMantenimiento($equipoId, $gravedad, $detalles) {
+    
+    static public function mdlFinalizarMantenimiento($idMantenimiento, $gravedad, $detalles)
+    {
         try {
             $db = Conexion::conectar();
-    
-            // 1. Actualizar mantenimiento
-            $stmt = $db->prepare("UPDATE mantenimiento SET gravedad = :gravedad, detalles = :detalles WHERE equipo_id = :equipo_id");
-            $stmt->bindParam(":gravedad", $gravedad);
-            $stmt->bindParam(":detalles", $detalles);
-            $stmt->bindParam(":equipo_id", $equipoId);
+
+            $stmt = $db->prepare(
+                "SELECT m.equipo_id, p.usuario_id 
+                 FROM mantenimiento m
+                 LEFT JOIN prestamos p ON m.id_prestamo = p.id_prestamo
+                 WHERE m.id_mantenimiento = :id_mantenimiento"
+            );
+            $stmt->bindParam(":id_mantenimiento", $idMantenimiento);
             $stmt->execute();
-    
-            // 2. Obtener usuario asociado (puede no existir)
-            $stmt2 = $db->prepare("SELECT id_usuario FROM mantenimiento WHERE equipo_id = :equipo_id");
-            $stmt2->bindParam(":equipo_id", $equipoId);
+            $datosMantenimiento = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $equipoId = $datosMantenimiento['equipo_id'];
+            $usuarioId = $datosMantenimiento['usuario_id'];
+
+            $stmt2 = $db->prepare(
+                "UPDATE mantenimiento 
+                 SET gravedad = :gravedad, 
+                     detalles = :detalles,
+                     fecha_fin = NOW() 
+                 WHERE id_mantenimiento = :id_mantenimiento"
+            );
+            $stmt2->bindParam(":gravedad", $gravedad);
+            $stmt2->bindParam(":detalles", $detalles);
+            $stmt2->bindParam(":id_mantenimiento", $idMantenimiento);
             $stmt2->execute();
-            $usuario = $stmt2->fetch(PDO::FETCH_ASSOC);
-    
-            $estadoEquipo = 1; // por defecto
-    
-            // 3. Lógica según gravedad
+
+            $estadoEquipo = 1; 
+
             if ($gravedad == "ninguno") {
                 $estadoEquipo = 1;
             } elseif ($gravedad == "leve") {
                 $estadoEquipo = 1;
-                if ($usuario && $usuario["id_usuario"]) {
-                    $stmt3 = $db->prepare("UPDATE usuarios SET condicion = 'advertido' WHERE id_usuario = :id");
-                    $stmt3->bindParam(":id", $usuario["id_usuario"]);
+                if ($usuarioId) {
+                    $stmt3 = $db->prepare(
+                        "UPDATE usuarios 
+                         SET condicion = 'advertido' 
+                         WHERE id_usuario = :id_usuario"
+                    );
+                    $stmt3->bindParam(":id_usuario", $usuarioId);
                     $stmt3->execute();
                 }
             } elseif ($gravedad == "grave") {
                 $estadoEquipo = 8;
-                if ($usuario && $usuario["id_usuario"]) {
-                    $stmt4 = $db->prepare("UPDATE usuarios SET condicion = 'penalizado' WHERE id_usuario = :id");
-                    $stmt4->bindParam(":id", $usuario["id_usuario"]);
+                if ($usuarioId) {
+                    $stmt4 = $db->prepare(
+                        "UPDATE usuarios 
+                         SET condicion = 'penalizado' 
+                         WHERE id_usuario = :id_usuario"
+                    );
+                    $stmt4->bindParam(":id_usuario", $usuarioId);
                     $stmt4->execute();
                 }
             } elseif ($gravedad == "inrecuperable") {
                 $estadoEquipo = 8;
             }
-    
-            // 4. Actualizar estado del equipo
-            $stmt5 = $db->prepare("UPDATE equipos SET id_estado = :estado WHERE equipo_id = :equipo_id");
+
+            $stmt5 = $db->prepare(
+                "UPDATE equipos 
+                 SET id_estado = :estado 
+                 WHERE equipo_id = :equipo_id"
+            );
             $stmt5->bindParam(":estado", $estadoEquipo);
             $stmt5->bindParam(":equipo_id", $equipoId);
             $stmt5->execute();
-    
+
             return "ok";
-    
         } catch (PDOException $e) {
             return "error";
         }
     }
-    
 }

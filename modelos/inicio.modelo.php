@@ -4,21 +4,6 @@ include_once "conexion.php";
 
 class ModeloInicio
 {
-    // public function mdlobtenerPrestamosPorDia()
-    // {
-    //     $sql = "SELECT 
-    //             ELT(WEEKDAY(fecha_solicitud)+1, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo') AS dia,
-    //              COUNT(*) AS cantidad
-    //             FROM prestamos
-    //             WHERE WEEK(fecha_solicitud) = WEEK(CURDATE())
-    //              AND YEAR(fecha_solicitud) = YEAR(CURDATE())
-    //             GROUP BY dia
-    //             ORDER BY FIELD('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes');";
-
-    //     $stmt = Conexion::conectar()->prepare($sql);
-    //     $stmt->execute();
-    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // }
 
     public static function mdlObtenerPrestamosPorDia($tipo)
     {
@@ -78,4 +63,35 @@ class ModeloInicio
             $stmt = null;
         }
     }
+    //grafica Franco
+ static public function mdlContarUsuariosPorGenero($codigoFicha)
+    {
+        $tablaUsuarios = "usuarios";
+        $tablaAprendices = "aprendices_ficha";
+        $tablaFichas = "fichas";
+
+        $db = Conexion::conectar();
+
+        $sql = "SELECT 
+                u.genero,
+                f.descripcion AS nombre_ficha,
+                COUNT(*) as cantidad
+            FROM $tablaUsuarios u
+            INNER JOIN $tablaAprendices af ON u.id_usuario = af.id_usuario
+            INNER JOIN $tablaFichas f ON af.id_ficha = f.id_ficha
+            WHERE f.codigo = :codigoFicha
+            GROUP BY u.genero";
+            
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(":codigoFicha", $codigoFicha, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+ 
 }
+
+
+
+

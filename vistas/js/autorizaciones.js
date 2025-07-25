@@ -159,6 +159,7 @@ $(document).on("click", ".btnVerDetallePrestamo_Autorizar", function () {
         success: function (respuestaUsuario) {
           // console.log("USUARIO :", respuestaUsuario);
           //colocamos los datos del usuario
+          $("#estadoPrestamo").text(respuesta["estado_prestamo"]);
           $("#usuarioNombre").text(
             respuestaUsuario["nombre"] + " " + respuestaUsuario["apellido"]
           );
@@ -173,6 +174,15 @@ $(document).on("click", ".btnVerDetallePrestamo_Autorizar", function () {
           } else {
             $("#usuarioFicha").text("N/A");
           }
+          // Si el estado es rechazado, mostramos el motivo de rechazo
+          if (respuesta["estado_prestamo"] === "Rechazado") {
+              $("#motivoRechazoTexto")
+                  .text("Motivo de rechazo: " + (respuesta["motivo_rechazo"] || "No especificado"))
+                  .show();
+          } else {
+              $("#motivoRechazoTexto").hide();
+          }
+
 
           //colocamos la imagen del usuario
           if (respuestaUsuario["foto"] != "") {

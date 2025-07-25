@@ -9,10 +9,9 @@ class ControladorMantenimiento{
 		return $respuesta;
 	}
 
-    static public function ctrFinalizarMantenimiento($equipoId, $gravedad, $detalles) {
-        return ModeloMantenimiento::mdlFinalizarMantenimiento($equipoId, $gravedad, $detalles);
-    }
+    static public function ctrFinalizarMantenimiento($idMantenimiento, $gravedad, $detalles) {
+		return ModeloMantenimiento::mdlFinalizarMantenimiento($idMantenimiento, $gravedad, $detalles);
+	}
     
 }
-
 

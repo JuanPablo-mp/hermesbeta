@@ -9,7 +9,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
 
                     <div class="card card-primary">
                         <div class="card-header">
@@ -78,7 +78,7 @@
 
                 <!-- Tabla de Préstamos -->
 
-                <div class="card card-success col-md-8" id="resultados" style="display: none;">
+                <div class="card card-success col-md-9" id="resultados" style="display: none;">
                     <div class="card-header">
                         <h3 class="card-title">Préstamos del Usuario</h3>
                     </div>

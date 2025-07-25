@@ -20,6 +20,7 @@ class AjaxEquipos {
     public $buscarDocumentoId;
     public $idEquipoTraspasoUbicacion;
     public $nuevaUbicacionId;
+    public $idEquipoTrazabilidad;
 
     /* ==================================================
     MÉTODO PARA EDITAR EQUIPO
@@ -63,15 +64,9 @@ class AjaxEquipos {
     $respuesta = ControladorEquipos::ctrImportarEquiposMasivo();
     echo $respuesta;
     exit;
-  }
+    }
 
-    // public function ajaxMostrarDatosUbicacionDestino(){
-    //     $item = "ubicacion_id";
-    //     $valor = $this -> nuevaUbicacionId;
-    //     $respuesta = ControladorEquipos::ctrMostrarUbicacionDestino($item, $valor);
-    //     // error_log(print_r($respuesta, true));
-    //     echo json_encode($respuesta);
-    // }
+
 }
 
 

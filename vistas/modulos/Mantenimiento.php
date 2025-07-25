@@ -20,7 +20,8 @@
               <table id="tblMantenimiento" class="table table-bordered table-striped">
                 <thead class="bg-dark">
                   <tr>
-                    <th>ID</th>
+                    <th>ID mantenimiento</th>
+                    <th>ID equipo</th>
                     <th>Numero de serie</th>
                     <th>Etiqueta</th>
                     <th>Descripcion</th>
@@ -37,13 +38,21 @@
                     foreach ($mantenimientos as $key => $value) {
                       echo '
                         <tr>
+                          <td>' . $value["id_mantenimiento"] . '</td>
                           <td>' . $value["equipo_id"] . '</td>
                           <td>' . $value["numero_serie"] . '</td>
                           <td>' . $value["etiqueta"] . '</td>
                           <td>' . $value["descripcion"] . '</td>
+                          <!-- Datos del usuario como atributos data -->
+                          <td class="d-none" data-nombre="' . $value["nombre"] . '" 
+                                           data-apellido="' . $value["apellido"] . '" 
+                                           data-condicion="' . $value["condicion"] . '">
+                          </td>
                           <td>
                             <div class="btn-group">
-                              <button title="Finalizar mantenimiento" class="btn btn-default btn-sm btnFinalizarMantenimiento" data-id="' . $value["equipo_id"] . '" data-toggle="modal" data-target="#modalFinalizarMantenimiento">
+                              <button title="Finalizar mantenimiento" class="btn btn-default btn-sm btnFinalizarMantenimiento" 
+                                      data-id="' . $value["id_mantenimiento"] . '" 
+                                      data-toggle="modal" data-target="#modalFinalizarMantenimiento">
                                 <i class="fas fa-tools"></i>
                               </button>
                             </div>
@@ -76,7 +85,7 @@
       </div>
 
       <form id="formFinalizarMantenimiento" method="post">
-        <input type="hidden" id="equipoId" name="equipoId">
+        <input type="hidden" id="idMantenimiento" name="idMantenimiento">
         <div class="modal-body">
           <div class="row">
             <div class="col-md-5 text-center border-right">
@@ -103,6 +112,33 @@
                   </table>
                 </div>
               </div>
+
+              <!-- informacion del usuario -->
+              <div class="card card-info">
+                <div class="card-header py-2">
+                  <h3 class="card-title small">
+                    <i class="fas fa-user mr-1"></i>Usuario Asociado
+                  </h3>
+                </div>
+                <div class="card-body p-2">
+                  <table class="table table-sm small mb-0">
+                    <tbody>
+                      <tr>
+                        <th style="width: 35%"><i class="fas fa-user mr-1"></i>Nombre:</th>
+                        <td id="nombre" class="text-muted"></td>
+                      </tr>
+                      <tr>
+                        <th><i class="fas fa-user-tag mr-1"></i>Apellido:</th>
+                        <td id="apellido" class="text-muted"></td>
+                      </tr>
+                      <tr>
+                        <th><i class="fas fa-info-circle mr-1"></i>Condición:</th>
+                        <td id="condicion" class="text-muted"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
 
             <div class="col-md-7">
@@ -110,8 +146,6 @@
                 <h5 class="border-bottom pb-2 text-info">
                   <i class="fas fa-tools mr-2"></i>Estado del Mantenimiento
                 </h5>
-
-
                 <div class="form-group">
                   <label class="mb-2">
                     <strong> Nivel de Gravedad:</strong>

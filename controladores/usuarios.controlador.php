@@ -84,7 +84,7 @@ class ControladorUsuarios
     }
 
 
-    static public function ctrEditarPerfil()
+        static public function ctrEditarPerfil()
     {
         if (isset($_POST["editarEmail"])) {
 
@@ -94,12 +94,15 @@ class ControladorUsuarios
             $usuario = self::ctrMostrarUsuarios("id_usuario", $_POST["idUsuario"]);
             $numeroDocumento = $usuario["numero_documento"];
 
+            $huboCambios = false;
+
             /*=============================================
             VALIDAR IMAGEN
             =============================================*/
             $ruta = $usuario["foto"]; // Mantener foto actual
 
             if (isset($_FILES["editarFoto"]["tmp_name"]) && !empty($_FILES["editarFoto"]["tmp_name"])) {
+                 $huboCambios = true;
 
                 /*=============================================
                 VALIDAR TIPO DE ARCHIVO
@@ -159,12 +162,65 @@ class ControladorUsuarios
                     return;
                 }
             }
+            
+        $encriptar = $usuario["clave"];
+
+// Solo validar si el usuario realmente escribió algo nuevo
+        if (!empty($_POST["nuevoPassword"])) {
+            $nuevaPassword = $_POST["nuevoPassword"];
+
+            // Validar que no sea igual al documento y que no sea la misma contraseña anterior
+            if ($nuevaPassword != $usuario["numero_documento"] && 
+                crypt($nuevaPassword, $usuario["clave"]) != $usuario["clave"]) {
+                $huboCambios = true;
+                $encriptar = crypt($nuevaPassword, '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
+                }
+            }
+        
+
+        // VERIFICAR SI CAMBIÓ ALGÚN DATO
+        if (
+            $_POST["editarEmail"] != $usuario["correo_electronico"] ||
+            $_POST["editarTelefono"] != $usuario["telefono"] ||
+            $_POST["editarDireccion"] != $usuario["direccion"] ||
+            $_POST["editarGenero"] != $usuario["genero"]
+        ) {
+            $huboCambios = true;
+        }
+
+        // SI NO HUBO CAMBIOS, SALIR
+        if (!$huboCambios) {
+            echo '<script>
+                Swal.fire({
+                    icon: "info",
+                    title: "Sin cambios",
+                    text: "No realizaste ningún cambio.",
+                    confirmButtonText: "Cerrar"
+                });
+            </script>';
+            return;
+        }
+
+        // SOLO SI HUBO CAMBIOS ACTUALIZAMOS
+        $tabla = "usuarios";
+        $tabla = "usuarios";
+        $datos = [
+            "id_usuario" => $_POST["idUsuario"],
+            "correo_electronico" => $_POST["editarEmail"],
+            "telefono" => $_POST["editarTelefono"],
+            "direccion" => $_POST["editarDireccion"],
+            "genero" => $_POST["editarGenero"],
+            "clave" => $encriptar,
+            "foto" => $ruta
+        ];
+
+$respuesta = ModeloUsuarios::mdlEditarPerfil($tabla, $datos);
+
 
             /*=============================================
             ACTUALIZAR BASE DE DATOS
             =============================================*/
             $tabla = "usuarios";
-            $encriptar = crypt($_POST["nuevoPassword"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
             $datos = array(
                 "id_usuario" => $_POST["idUsuario"],
                 "correo_electronico" => $_POST["editarEmail"],

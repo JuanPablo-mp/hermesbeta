@@ -68,7 +68,7 @@
 
 
 
-        echo '<li class="nav-item">
+        echo '<li class="nav-item tour-home">
             <a href="inicio" class="nav-link">
               <i class="nav-icon fas fa-home"></i>
               <p>
@@ -78,7 +78,7 @@
           </li>';
 
         if (ControladorValidacion::validarPermisoSesion([22,25,28,30,29])) {
-          echo '<li class="nav-item">
+          echo '<li class="nav-item tour-administar">
                       <a href="#" class="nav-link">
                       <i class="nav-icon fas fa-cogs"></i>
                       <p>
@@ -147,40 +147,25 @@
                   </li>';
         }
         if (ControladorValidacion::validarPermisoSesion([34])) {
-          echo '<li class="nav-item">
+          echo '<li class="nav-item tour-usuarios">
                 <a href="usuarios" class="nav-link">
                   <i class="nav-icon fas fa-users fa-angle-left"></i>
                   <p>Usuarios</p>
                 </a>
               </li>';
         }
+        
         if (ControladorValidacion::validarPermisoSesion([1])) {
           echo '
-            <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-laptop"></i>
-              <p>Equipos
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="inventario" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inventario</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="reporte-equipos" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Reportes</p>
-                </a>
-              </li>
-            </ul>';
+            <li class="nav-item tour-equipos">
+              <a href="inventario" class="nav-link">
+                <i class="nav-icon fas fa-laptop"></i>
+                <p>Inventario</p>
+              </a>
+            </li>';
         }
 
-
-        echo '<li class="nav-item">
+        echo '<li class="nav-item tour-solicitudes">
                 <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-file-alt"></i>
                 <p>
@@ -229,19 +214,17 @@
 
 
         if (ControladorValidacion::validarPermisoSesion([42])) {
-          echo '<li class="nav-item">
-              <li class="nav-item">
+          echo '<li class="nav-item tour-autorizaciones">
                 <a href="autorizaciones" class="nav-link">
                 <i class="nav-icon fas fa-check"></i>
                 <span class="badge badge-info right">' . $cantidadPrestamosPendientes . '+</span>
                 <span class="badge badge-primary right">' . $cantidadPrestamosTramite . '+</span>
                 <p>Autorizaciones</p>
                 </a>
-              </li>
             </li>';
         }
         if (ControladorValidacion::validarPermisoSesion([18, 16])) {
-          echo '<li class="nav-item">
+          echo '<li class="nav-item tour-salidas">
             <a href="salidas" class="nav-link">
               <i class="nav-icon fas fa-eye"></i>
               <span class="badge badge-info right">' . $cantidadSalidasTramite . '+</span>
@@ -254,7 +237,7 @@
         }
 
         if (ControladorValidacion::validarPermisoSesion([3])) {
-          echo '<li class="nav-item">
+          echo '<li class="nav-item tour-devoluciones">
             <a href="devoluciones" class="nav-link">
               <i class="nav-icon fas fa-reply"></i>
               <span class="badge badge-info right">' . $cantidadDevoluciones . '+</span>
@@ -268,7 +251,7 @@
 
 
         if (ControladorValidacion::validarPermisoSesion([20])) {
-          echo '<li class="nav-item">
+          echo '<li class="nav-item tour-mantenimiento">
             <a href="Mantenimiento" class="nav-link">
               <i class="nav-icon fas fa-tools"></i>
               <span class="badge badge-info right">' . count($cantidadMantenimientos) . '+</span>
@@ -455,7 +438,12 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-key"></i></span>
                   </div>
-                  <input type="password" class="form-control" name="nuevoPassword" placeholder="Password" required>
+                  <input type="password" class="form-control" name="nuevoPassword" placeholder="Password">
+                  <div class="input-group-append">
+              <div class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                <span class="fas fa-eye" id="toggleIcon"></span>
+              </div>
+              </div>
                 </div>
               </div>
             </div>

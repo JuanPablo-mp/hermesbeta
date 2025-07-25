@@ -39,7 +39,8 @@ $('#tblEquipos').DataTable({
                 if (usuarioActual["permisos"].includes(4)) {
                     botones += "<button title='Traspaso de ubicación' class='btn btn-default btnTraspasarUbicacion' idEquipoTraspasoUbicacion='" + row[0] + "' data-toggle='modal' data-target='#modalTraspasoUbicacion'><i class='fas fa-map-pin'></i></button>";
                 }
-                botones += "<button title='Ver historial' class='btn btn-default btnHistorialEquipo' idEquipoHistorial='" + row[0] + "' data-toggle='modal' data-target='#modalHistorialEquipo'><i class='fas fa-clock'></i></button>" +
+
+                botones += "<button title='Ver historial' class='btn btn-default btnHistorialEquipo' idEquipoHistorial='" + row[0] + "'><i class='fas fa-clock'></i></button>" +
                     "</div>";
 
                 return botones;

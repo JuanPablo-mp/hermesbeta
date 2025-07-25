@@ -101,4 +101,114 @@ input[type="number"] {
     font-size: 24px;
 }
 
+input[type="checkbox"].custom-disabled {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  /* border: 2px solid #28a745;  */
+  background-color: #e9fbe9; /* Fondo verde muy claro */
+  border-radius: 4px;
+  position: relative;
+  cursor: not-allowed;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+input[type="checkbox"].custom-disabled:checked::after {
+  content: '✔';
+  color: #28a745; 
+  font-size: 14px;
+  font-weight: bold;
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  line-height: 1;
+}
+
+/* Dentro de tu archivo CSS o en una etiqueta <style> en el HTML */
+
+/* Estilos para hacer el popover más grande */
+.driver-popover {
+    max-width: 340px !important;
+    height: auto;
+}
+
+.driverjs-custom-popover .driver-popover {
+    max-width: 800px; /* Puedes ajustar este valor según tus necesidades */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible hasta el max-width */
+}
+
+/* Opcional: si quieres aún más control o cambiar el color del texto del cabecero oscuro */
+.driverjs-custom-popover.driver-popover.driver-popover-dark .driver-popover-title {
+    color: #fff; /* Asegura que el título sea blanco en el tema oscuro */
+}
+
+.driver-popover.driverjs-theme {
+    background-color: #fff;
+    color: #000;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title {
+    font-size: 20px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-title,
+.driver-popover.driverjs-theme .driver-popover-description,
+.driver-popover.driverjs-theme .driver-popover-progress-text {
+    color: #000;
+}
+
+.driver-popover.driverjs-theme button {
+    flex: 1;
+    text-align: center;
+    background-color: #fff;
+    color: #000;
+    text-shadow: none;
+    font-size: 14px;
+    padding: 5px 8px;
+    border-radius: 6px;
+}
+
+.driver-popover.driverjs-theme button:hover {
+    background-color: #000;
+    color: #ffffff;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns {
+    justify-content: space-between;
+    gap: 1.2px;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn {
+    color: #9b9b9b;
+}
+
+.driver-popover.driverjs-theme .driver-popover-close-btn:hover {
+    color: #fff;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-left.driver-popover-arrow {
+    border-left-color: #9b9b9b;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-right.driver-popover-arrow {
+    border-right-color: #9b9b9b;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-top.driver-popover-arrow {
+    border-top-color: #9b9b9b;
+}
+
+.driver-popover.driverjs-theme .driver-popover-arrow-side-bottom.driver-popover-arrow {
+    border-bottom-color: #9b9b9b;
+}
+
+@media screen and (max-width: 768px) {
+    .tourButton {
+        display: none;
+    }
+}
+
 

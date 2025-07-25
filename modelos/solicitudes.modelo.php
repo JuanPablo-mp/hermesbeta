@@ -137,10 +137,11 @@ class ModeloSolicitudes
     {
 
         if($item != null){
-            $stmt = Conexion::conectar()->prepare("SELECT p.*, u.id_usuario, ur.id_rol, r.nombre_rol FROM prestamos p  
+            $stmt = Conexion::conectar()->prepare("SELECT p.*, u.id_usuario, ur.id_rol, r.nombre_rol, a.motivo_rechazo FROM prestamos p  
             JOIN usuarios u ON p.usuario_id = u.id_usuario 
             JOIN usuario_rol ur ON u.id_usuario = ur.id_usuario
             JOIN roles r on ur.id_rol = r.id_rol
+            LEFT JOIN autorizaciones a ON a.id_prestamo = p.id_prestamo AND a.motivo_rechazo IS NOT NULL
             WHERE p.$item = :$item");
             $stmt->bindParam(":" . $item, $valor, PDO::PARAM_INT);
             $stmt->execute();

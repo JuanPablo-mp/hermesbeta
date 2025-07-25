@@ -62,17 +62,17 @@
                                             <td>' . $value["tipo_prestamo"] . '</td>
                                             <td>' . $value["estado_prestamo"] . '</td>';
                                                 if (isset($autorizaciones["firma_coordinacion"]) && $autorizaciones["firma_coordinacion"] == "Firmado") {
-                                                    echo '<td><input type="checkbox" checked disabled title="Aprobado por '. $autorizaciones["nombre_usuario_coordinacion"] .'">' . '</td>';
+                                                    echo '<td><input type="checkbox" class="custom-disabled" checked disabled title="Aprobado por '. $autorizaciones["nombre_usuario_coordinacion"] .'">' . '</td>';
                                                 } else {
                                                     echo '<td><input type="checkbox" disabled title="En trámite...">' . '</td>';
                                                 }
                                                 if (isset($autorizaciones["firma_lider_tic"]) && $autorizaciones["firma_lider_tic"] == "Firmado") {
-                                                    echo '<td><input type="checkbox" checked disabled title="Aprobado por '. $autorizaciones["nombre_usuario_lider_tic"] .'">' . '</td>';
+                                                    echo '<td><input type="checkbox"class="custom-disabled" checked disabled title="Aprobado por '. $autorizaciones["nombre_usuario_lider_tic"] .'">' . '</td>';
                                                 } else {
                                                     echo '<td><input type="checkbox" disabled title="En trámite...">' . '</td>';
                                                 }
                                                 if (isset($autorizaciones["firma_almacen"]) && $autorizaciones["firma_almacen"] == "Firmado") {
-                                                    echo '<td><input type="checkbox" checked disabled title="Aprobado por '. $autorizaciones["nombre_usuario_almacen"] .'">' . '</td>';
+                                                    echo '<td><input type="checkbox" class="custom-disabled" checked disabled title="Aprobado por '. $autorizaciones["nombre_usuario_almacen"] .'">' . '</td>';
                                                 } else {
                                                     echo '<td><input type="checkbox" disabled title="En trámite...">' . '</td>';
                                                 }

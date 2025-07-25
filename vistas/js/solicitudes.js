@@ -238,6 +238,7 @@ $(document).ready(function () {
 $("#reservation").on("apply.daterangepicker", function (ev, picker) {
   var fechaInicio = picker.startDate.format("YYYY-MM-DD");
   var fechaFin = picker.endDate.format("YYYY-MM-DD");
+  $("#motivoSolicitud").val();
 
   // Obtener fecha actual en formato YYYY-MM-DD
   var fechaActual = new Date().toISOString().split("T")[0];
@@ -251,10 +252,14 @@ $("#reservation").on("apply.daterangepicker", function (ev, picker) {
     });
     return;
   }
-  if (fechaInicio === fechaFin) {
-      $("#motivoSolicitud").val(
-        "Solicitud de préstamo inmediato - " + fechaInicio
-      );
+  console.log("Fecha Inicio:", fechaInicio);
+  console.log("Fecha Fin:", fechaFin);
+  console.log("Fecha Actual:", fechaActual);
+  if ((fechaInicio === fechaFin) && (fechaInicio === fechaActual)) {
+    $("#motivoSolicitud").val();
+    $("#motivoSolicitud").val(
+      "Solicitud de préstamo inmediato - " + fechaInicio
+    );
     // si el usuario no tiene permiso para solicitar prestamos inmediatos, mostrar alerta
     if (!usuarioActual.permisos.includes(7)) {
       Swal.fire({
@@ -546,6 +551,7 @@ $("#idFormularioSolicitud").on("submit", function (event) {
   let idSolicitante = $("#idSolicitante").val();
   let fechaInicio = $("#initialDate").val();
   let fechaFin = $("#finalDate").val();
+  let fechaActual = new Date().toISOString().split("T")[0];
   let motivo = $("#motivoSolicitud").val();
   let tipoPrestamo = "Reserva";
 
@@ -562,7 +568,7 @@ $("#idFormularioSolicitud").on("submit", function (event) {
     });
     return;
   }
-  if (fechaInicio === fechaFin){
+  if ((fechaInicio === fechaFin) && (fechaInicio === fechaActual)) {
     tipoPrestamo = "Inmediato";
   }
 

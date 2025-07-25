@@ -38,6 +38,9 @@ session_start();
 
   <!-- Toastr -->
   <link rel="stylesheet" href="vistas/plugins/toastr/toastr.min.css">
+
+  <!-- CDN DE DRIVER.JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css"/>
   <!-- ================================================================================================== -->
 
   <!-- jQuery -->
@@ -78,7 +81,8 @@ session_start();
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  
+  <!-- CDN DE DRIVER.JS -->
+  <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
 
   <!-- CSS para evitar FOUC (Flash of Unstyled Content) -->
   <style>
@@ -111,7 +115,6 @@ session_start();
     echo '<script>
         const usuarioActual = {
             id: ' . $_SESSION['id_usuario'] . ',
-            cedula: ' . $_SESSION['numero_documento'] . ',
             permisos: ' . json_encode($_SESSION['permisos']) . '  
         }
     </script>';
@@ -137,12 +140,13 @@ session_start();
         $_GET["ruta"] == "autorizaciones" ||
         $_GET["ruta"] == "devoluciones" ||
         $_GET["ruta"] == "salidas" ||
-        $_GET["ruta"] == "reportes" ||
+        $_GET["ruta"] == "historial-equipos" ||
         $_GET["ruta"] == "Mantenimiento" ||
         $_GET["ruta"] == "reporte-equipos" ||
         $_GET["ruta"] == "desactivado" ||
         $_GET["ruta"] == "auditoria" ||
         $_GET["ruta"] == "notificaciones" ||
+        $_GET["ruta"] == "acerca-de" ||
         $_GET["ruta"] == "salir"
       ) {
 
@@ -179,6 +183,8 @@ session_start();
   <script src="vistas/js/mantenimiento.js"></script>
   <script src="vistas/js/notificaciones.js"></script>
   <script src="vistas/js/inicio.js"></script>
+  <script src="vistas/js/trazabilidad.js"></script>
+  <script src="vistas/js/tour.js"></script>
 
   <!-- JS para evitar FOUC (Flash of Unstyled Content) -->
   <script>

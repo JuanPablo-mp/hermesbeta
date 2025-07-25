@@ -1,31 +1,38 @@
 $(document).ready(function () {
-  // Cuando se hace clic en el botón de finalizar mantenimiento
   $(".btnFinalizarMantenimiento").click(function () {
-    var idMantenimiento = $(this).attr("data-id");
-    var fila = $(this).closest("tr");
-    var equipoId = fila.find("td:eq(0)").text(); // Asume que el ID está en la primera columna
+    var btn = $(this);
+    var fila = btn.closest("tr");
 
-    // Llenar datos en el modal
-    $("#equipoId").val(equipoId); // ESENCIAL para el insert
-    $("#equipoSerie").text(fila.find("td:eq(1)").text());
-    $("#equipoEtiqueta").text(fila.find("td:eq(2)").text());
-    $("#equipoDescripcion").text(fila.find("td:eq(3)").text());
+    // Datos del equipo
+    $("#idMantenimiento").val(btn.data("id"));
+    $("#equipoSerie").text(fila.find("td:eq(2)").text()); // Columna 2 es número de serie
+    $("#equipoEtiqueta").text(fila.find("td:eq(3)").text()); // Columna 3 es etiqueta
+    $("#equipoDescripcion").text(fila.find("td:eq(4)").text()); // Columna 4 es descripción
+
+    // Datos del usuario (obtenidos de los atributos data)
+    var usuarioTd = fila.find("td.d-none"); // Usamos la clase d-none que tiene los datos
+    $("#nombre").text(usuarioTd.data("nombre"));
+    $("#apellido").text(usuarioTd.data("apellido"));
+    $("#condicion").text(usuarioTd.data("condicion"));
 
     $("#modalFinalizarMantenimiento").modal("show");
   });
-  
 
   $("#formFinalizarMantenimiento").on("submit", function (e) {
     e.preventDefault();
 
-    var formData = new FormData(this);
+    var idMantenimiento = $("#idMantenimiento").val();
+    var gravedad = $("input[name='gravedad']:checked", this).val();
+    var detalles = $("#descripcionProblema").val();
 
     $.ajax({
       url: "ajax/mantenimiento.ajax.php",
       method: "POST",
-      data: formData,
-      processData: false,
-      contentType: false,
+      data: {
+        idMantenimiento: idMantenimiento,
+        gravedad: gravedad,
+        detalles: detalles,
+      },
       success: function (respuesta) {
         if (respuesta === "ok") {
           Swal.fire({
@@ -35,8 +42,19 @@ $(document).ready(function () {
             timer: 1500,
           }).then(() => location.reload());
         } else {
-          Swal.fire("Error", "No se pudo finalizar el mantenimiento", "error");
+          Swal.fire(
+            "Error",
+            respuesta || "No se pudo finalizar el mantenimiento",
+            "error"
+          );
         }
+      },
+      error: function (xhr, status, error) {
+        Swal.fire(
+          "Error",
+          "Error en la comunicación con el servidor: " + error,
+          "error"
+        );
       },
     });
   });

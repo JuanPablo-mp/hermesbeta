@@ -67,7 +67,7 @@ $(document).on("click", "#btnBuscarUsuarioConsultar", function () {
                   data: null,
                   render: function (row) {
                     return (
-                      '<div class="text-center"><div class="btn-group"><button class="btn btn-warning btnVerDetallePrestamo" idPrestamo="' +
+                      '<div class="text-center"><div class="btn-group"><button class="btn btn-default btnVerDetallePrestamo" idPrestamo="' +
                       row.id_prestamo +
                       '" title="Detalles del prestamos" data-bs-toggle="tooltip"data-toggle="modal" data-target="#modal-detalle" type="button"><i class="fa fa-eye"></i></button></div></div>'
                     );

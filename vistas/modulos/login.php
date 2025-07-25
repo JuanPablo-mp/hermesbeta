@@ -22,7 +22,7 @@
             <input type="password" class="form-control" placeholder="Password" name="ingPassword" id="passwordField" required>
             <div class="input-group-append">
               <div class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
-                <span class="fas fa-eye" id="toggleIcon"></span>
+                <span class="fas fa-eye-slash" id="toggleIcon"></span>
               </div>
               <div class="input-group-text">
                 <span class="fas fa-lock"></span>

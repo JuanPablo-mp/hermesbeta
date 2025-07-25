@@ -10,6 +10,7 @@ img/usuarios/*
 
 # excep default user folder
 !img/usuarios/default/
+!img/desarrolladores/
 
 # Error log
 log.php
