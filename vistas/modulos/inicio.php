@@ -12,8 +12,7 @@
         </div>
         <!-- Contenedor para los contenedores -->
         <div class="container-fluid d-flex flex-row flex-wrap justify-content-between estadisticasTour">
-          <div class="row">
-          <div class="col-lg-3 col-12">
+            <div class="col-lg-3 col-12">
               <!-- small box -->
               <?php
               $conteos = ControladorSolicitudes::ctrContarEquiposPorCategoria();
@@ -80,9 +79,8 @@
                   <i class="fas fa-gamepad"></i>
                 </div>
 
+              </div>
             </div>
-            </div>
-          </div>
 
           <!-- Contenedor principal -->
 
@@ -283,11 +281,11 @@
             </div><!-- /.row -->
           </div>
         </div>
-
       </div>
+      
     </div>
-</section>
-<!-- /.content -->
+  </section>
+  <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 
